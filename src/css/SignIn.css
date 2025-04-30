@@ -1,0 +1,147 @@
+
+.signin-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #eef1f5;
+    padding: 20px;
+  }
+
+  .signin-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  h2 {
+    margin-bottom: 10px;
+    font-size: 24px;
+  }
+  
+  .subtext {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    box-sizing: border-box;
+  }
+  
+  input:focus {
+    border-color: #3b82f6;
+    outline: none;
+  }
+  
+
+  .error-text {
+    color: #ef4444;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .primary-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #0a66c2;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 24px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .primary-btn:hover {
+    background-color: #004182;
+  }
+  
+  .alt-btn {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #000;
+    font-size: 16px;
+    border-radius: 24px;
+    background-color: white;
+    cursor: pointer;
+  }
+
+  .divider {
+    text-align: center;
+    margin: 20px 0;
+    position: relative;
+  }
+  
+  .divider span {
+    background-color: white;
+    padding: 0 10px;
+    color: #666;
+    font-size: 14px;
+  }
+  
+  .divider::before {
+    content: "";
+    height: 1px;
+    width: 100%;
+    background: #ccc;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    z-index: 0;
+  }
+  
+
+  .signup-link {
+    margin-top: 20px;
+    font-size: 14px;
+    text-align: center;
+  }
+  
+  .signup-link a {
+    color: #0a66c2;
+    font-weight: 600;
+  }
+  
+
+  @media (max-width: 480px) {
+    .signin-card {
+      padding: 30px 20px;
+    }
+  
+    h2 {
+      font-size: 20px;
+    }
+  
+    .primary-btn,
+    .alt-btn {
+      font-size: 14px;
+      padding: 10px;
+    }
+  
+    .signup-link {
+      font-size: 13px;
+    }
+  
+    input {
+      font-size: 14px;
+    }
+  }
+  
+.signin-logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 120px;
+    z-index: 10;
+  }
+  
