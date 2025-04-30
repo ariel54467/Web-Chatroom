@@ -1,14 +1,15 @@
 import { auth } from "../firebase"
 import { signOut } from "firebase/auth"
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 export const Chat = () => {
-
-    const SignOut = async() =>{
+    const nav = useNavigate();
+    const SignOut = async() => {
         try{
             await signOut(auth);
+            nav('/')
         }catch(error){
-            alert(error);
+            alert(error.message);
         }
     }
 
@@ -17,11 +18,9 @@ export const Chat = () => {
             <h1>
                 Icell sayang kuu
             </h1>
-            <Link to='/'>
-                <button>
+                <button onClick={SignOut}>
                     Sign Out
                 </button>
-            </Link>
         </div>
     )
 }

@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { auth, googleAuth } from "../firebase";
+import { auth, googleAuth, db } from "../firebase";
+import { set, ref, get } from "firebase/database"
 import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import "../css/SignIn.css";
@@ -12,8 +13,22 @@ export const SignIn = () => {
 
   const googleSignIn = async () => {
     try {
-      await signInWithPopup(auth, googleAuth);
-      nav('/chat');
+        const result = await signInWithPopup(auth, googleAuth);
+        const user = result.user;
+    
+        const userRef = ref(db, "users/" + user.uid);
+    
+        // Check if user already exists (avoid overwrite)
+        const snapshot = await get(userRef);
+        if (!snapshot.exists()) {
+          await set(userRef, {
+            displayName: user.displayName,
+            email: user.email,
+          });
+        }
+    
+        // then go to chat
+        nav("/chat");
     } catch (error) {
       alert(error.message);
     }
@@ -23,6 +38,7 @@ export const SignIn = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       nav('/chat');
+
     } catch (error) {
       alert(error.message);
     }
@@ -35,6 +51,7 @@ export const SignIn = () => {
       <form onSubmit={(e) => { e.preventDefault(); emailSignIn(); }} className="signin-card">
         <h2>Sign in</h2>
         <p className="subtext">Stay connected with your chat world</p>
+
 
         <input
           type="email"

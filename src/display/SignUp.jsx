@@ -1,18 +1,25 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import { ref, set } from "firebase/database"
 import "../css/SignUp.css";
 import logo from "../assets/logonobg.png";
 
 export const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPass] = useState("");
+  const [userName, setuserName] = useState("");
   const nav = useNavigate();
 
   const signUp = async () => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userInfo = await createUserWithEmailAndPassword(auth, email, password);
+      const uid = userInfo.user.uid;
+      await set(ref(db, "users/" + uid),{
+        userName,
+        email,
+        });
       await signOut(auth); 
       nav("/signin");
     } catch (error) {
@@ -27,6 +34,13 @@ export const SignUp = () => {
       <form onSubmit={(e) => { e.preventDefault(); signUp(); }} className="signup-card">
         <h2>Sign up</h2>
         <p className="subtext">Create your account to start chatting</p>
+
+        <input
+            placeholder="Display Name" 
+            value={userName}
+            onChange={(e) => setuserName(e.target.value)}
+            required
+        />
 
         <input
           type="email"
