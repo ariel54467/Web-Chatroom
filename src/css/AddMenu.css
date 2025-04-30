@@ -1,0 +1,72 @@
+.addmenu-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+  }
+  
+  .addmenu {
+    background: white;
+    padding: 20px;
+    width: 320px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .addmenu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  
+  .addmenu-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  
+  .addmenu-tabs button {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    border-radius: 6px;
+    background-color: #f3f4f6;
+    cursor: pointer;
+  }
+  
+  .addmenu-tabs .active {
+    background-color: #3b82f6;
+    color: white;
+  }
+  
+  .addmenu-body input[type="text"],
+  .addmenu-body input[type="email"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  
+  .friend-checkboxes {
+    max-height: 200px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .addmenu-body button {
+    width: 100%;
+    padding: 10px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  

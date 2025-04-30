@@ -1,21 +1,53 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { db, auth } from "../firebase";
+import { ref, onValue } from "firebase/database";
+import { useChat } from "./ChatContext";
 
 export const People = () => {
-  const contacts = [
-    { id: 1, name: "Chat 1" },
-    { id: 2, name: "Chat 2" },
-  ];
+  const [chats, setChats] = useState([]);
+  const currentUser = auth.currentUser;
+  const { setselectedChatId } = useChat();
+
+  useEffect(() => {
+    const chatRef = ref(db, "chats");
+
+    onValue(chatRef, (snapshot) => {
+      const data = snapshot.val();
+      const chatList = [];
+
+      for (let id in data) {
+        const chat = data[id];
+
+        if (
+          chat.type === "group" &&
+          chat.members &&
+          chat.members[currentUser.uid]
+        ) {
+          chatList.push({
+            id,
+            name: chat.name,
+          });
+        }
+      }
+
+      setChats(chatList);
+    });
+  }, [currentUser]);
 
   return (
     <div className="people-container">
       <div className="people-header">
-        <h2>Contacts</h2>
+        <h2>Group Chats</h2>
       </div>
 
       <div className="people-list">
-        {contacts.map((contact) => (
-          <div className="chat-info" key={contact.id}>
-            <span>{contact.name}</span>
+        {chats.map((chat) => (
+          <div
+            className="chat-info"
+            key={chat.id}
+            onClick={() => setselectedChatId(chat.id)}
+          >
+            <span>{chat.name}</span>
           </div>
         ))}
       </div>

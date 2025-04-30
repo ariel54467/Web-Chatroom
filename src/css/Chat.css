@@ -164,3 +164,25 @@
     cursor: pointer;
   }
   
+  .create-chat {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .create-chat input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  
+  .create-chat button {
+    padding: 8px 12px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  

@@ -47,8 +47,7 @@ export const SignIn = () => {
       <form onSubmit={(e) => { e.preventDefault(); emailSignIn(); }} className="signin-card">
         <h2>Sign in</h2>
         <p className="subtext">Stay connected with your chat world</p>
-
-
+        
         <input
           type="email"
           placeholder="Email"

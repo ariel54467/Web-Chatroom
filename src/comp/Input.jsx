@@ -1,19 +1,22 @@
 import React, { useState } from "react";
 import { db, auth } from "../firebase";
 import { push, ref, serverTimestamp } from "firebase/database";
+import { useChat } from "./ChatContext";
 
 export const Input = () => {
   const [message, setMessage] = useState("");
+  const { selectedChatId } = useChat();
 
   const sendMessage = () => {
-    if (message === "") return;
+    if (!selectedChatId || message.trim() === "") return;
 
-    const msgRef = ref(db, "chatroom/messages");
+    const msgRef = ref(db, `chats/${selectedChatId}/messages`);
     push(msgRef, {
       text: message,
-      sender: auth.currentUser.userName,
+      sender: auth.currentUser.email,
       timestamp: serverTimestamp(),
     });
+
     setMessage("");
   };
 
