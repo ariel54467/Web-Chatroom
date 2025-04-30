@@ -1,0 +1,62 @@
+.input-container {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    gap: 8px;
+    width: 100%;
+  }
+  
+  .input-container input {
+    flex: 1;
+    height: 32px;
+    padding-top: 20px;
+    font-size: 20px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #111827;
+  }
+  
+  .input-container input::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+    font-size: 14px;
+  }
+  
+  .input-container button {
+    height: 32px;
+    width: 32px;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+  }
+  
+  
+  .input-container button img {
+    height: 32px;
+    width: 32px;
+    object-fit: contain;
+  }
+
+  @media screen and (max-width: 600px) {
+    .input-container {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .input-container input,
+    .input-container button {
+      width: 100%;
+    }
+  
+    .input-container button {
+      margin-top: 6px;
+      border-radius: 6px;
+    }
+  }
+  

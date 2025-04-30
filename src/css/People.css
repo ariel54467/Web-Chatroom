@@ -1,0 +1,65 @@
+.people-container {
+    padding: 16px;
+    border-top: 1px solid #e0e0e0;
+    background-color: #ffffff;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.people-header {
+    margin-bottom: 12px;
+}
+
+.people-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.people-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.chat-info {
+    padding: 10px 14px;
+    background-color: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.chat-info:hover {
+    background-color: #e5e7eb;
+}
+
+.chat-info span {
+    font-size: 15px;
+    color: #111827;
+    font-weight: 500;
+}
+
+@media screen and (max-width: 768px) {
+    .people-container {
+        padding: 12px;
+    }
+
+    .chat-info {
+        padding: 8px 12px;
+    }
+
+    .chat-info span {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .people-header h2 {
+        font-size: 16px;
+    }
+
+    .chat-info span {
+        font-size: 13px;
+    }
+}

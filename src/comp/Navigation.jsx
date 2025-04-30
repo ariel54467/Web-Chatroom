@@ -1,31 +1,38 @@
 import React, { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
 import { ref, onValue } from "firebase/database";
+import { onAuthStateChanged } from "firebase/auth";
+import "../css/Navigation.css"
 
 
 export const Navigation = () =>{
-    const [displayName, setName] = useState("");
+    const [displayName, setDisplayName] = useState("");
     const [photo, setPhoto] = useState(null);
-
-    const user = auth.currentUser;
-    useEffect(()=>{
-        if (!user) return;
-        const userInfo = ref(db, `users/${user.uid}`);
-        onValue(userInfo, (snapshot)=>{
+  
+    useEffect(() => {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        if (user) {
+          const userRef = ref(db, `users/${user.uid}`);
+          onValue(userRef, (snapshot) => {
             const data = snapshot.val();
-            setName(data?.userName);
-        });
-        if(user.photoURL){
+            setDisplayName(data?.userName || user.email);
+          });
+  
+          if (user.photoURL) {
             setPhoto(user.photoURL);
+          }
         }
-    } , [user]);
-
-    return(
-        <div className="nav-bar">
-            <div className="userinfo">
-                <img src={photo} className="profile-photo"></img>
-                <span className="userinfo">{displayName}</span>
-            </div>
+      });
+  
+      return () => unsubscribe();
+    }, []);
+  
+    return (
+      <div className="nav-bar">
+        <div className="userinfo">
+          <img src={photo} className="profile-photo" />
+          <span className="userinfo">{displayName}</span>
         </div>
-    )
+      </div>
+    );
 }

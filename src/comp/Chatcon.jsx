@@ -4,7 +4,7 @@ import { Messages } from "./Messages";
 import { Input } from "./Input";
 import { db } from "../firebase";
 import { ref, onValue } from "firebase/database";
-import "../css/Chat.css";
+import "../css/Chatcon.css";
 
 export const Chatcon = () => {
   const { selectedChatId } = useChat();

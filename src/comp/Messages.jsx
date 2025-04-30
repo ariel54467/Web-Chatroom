@@ -3,6 +3,7 @@ import { db } from "../firebase";
 import { ref, onValue } from "firebase/database";
 import { useChat } from "./ChatContext";
 import { ChatBubble } from "./ChatBubble";
+import "../css/Messages.css"
 
 export const Messages = () => {
   const [messages, setMessages] = useState([]);

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { db, auth } from "../firebase";
 import { ref, onValue } from "firebase/database";
 import { useChat } from "./ChatContext";
+import "../css/People.css"
 
 export const People = () => {
   const [chats, setChats] = useState([]);

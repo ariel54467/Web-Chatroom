@@ -67,14 +67,14 @@ export const AddMenu = ({ onClose }) => {
           />
           <div className="friend-checkboxes">
             {allUsers.map((user) => (
-              <label key={user.uid}>
-                <input
-                  type="checkbox"
-                  checked={!!selectedMembers[user.uid]}
-                  onChange={() => toggleMember(user.uid)}
-                />
-                {user.userName || user.email}
-              </label>
+             <label key={user.uid}>
+             <span>{user.userName || user.email}</span>
+             <input
+               type="checkbox"
+               checked={!!selectedMembers[user.uid]}
+               onChange={() => toggleMember(user.uid)}
+             />
+           </label>           
             ))}
           </div>
           <button onClick={handleCreateGroup}>Create</button>

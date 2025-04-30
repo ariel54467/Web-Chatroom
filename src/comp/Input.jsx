@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { db, auth } from "../firebase";
 import { push, ref, serverTimestamp } from "firebase/database";
 import { useChat } from "./ChatContext";
+import "../css/Input.css"
+import send from "../assets/send.png"
 
 export const Input = () => {
   const [message, setMessage] = useState("");
@@ -28,7 +30,9 @@ export const Input = () => {
         placeholder="Type a message..."
         onKeyDown={(e) => e.key === "Enter" && sendMessage()}
       />
-      <button onClick={sendMessage}>Send</button>
+      <button  onClick={sendMessage}>
+          <img src={send}></img>
+      </button>
     </div>
   );
 };
