@@ -1,6 +1,6 @@
 .home-split {
   display: flex;
-  height: 100vh;
+  height: 95vh;
   overflow: hidden;
   flex-direction: row;
 }
