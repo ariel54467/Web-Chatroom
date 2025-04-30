@@ -6,15 +6,25 @@ export const Home = () => {
   return (
     <div className="home-split">
  
-    <div className="home-left">
+ <div className="home-left">
+  <div className="video-cube-wrapper">
     <video autoPlay loop muted className="background-video">
-        <source src="/src/assets/bg.mp4" type="video/mp4" />
+      <source src="/src/assets/bg.mp4" type="video/mp4" />
     </video>
 
-    <div className="logo-center-wrapper">
-        <img src={logo} alt="Logo" className="logo-centered" />
+    <div className="scene">
+      <div className="cube">
+        <div className="face front"><img src={logo} alt="front" /></div>
+        <div className="face back"><img src={logo} alt="back" /></div>
+        <div className="face right"><img src={logo} alt="right" /></div>
+        <div className="face left"><img src={logo} alt="left" /></div>
+        <div className="face top"><img src={logo} alt="top" /></div>
+        <div className="face bottom"><img src={logo} alt="bottom" /></div>
+      </div>
     </div>
-    </div>
+  </div>
+</div>
+
 
 
     <div className="home-right">
