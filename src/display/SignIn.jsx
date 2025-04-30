@@ -15,19 +15,15 @@ export const SignIn = () => {
     try {
         const result = await signInWithPopup(auth, googleAuth);
         const user = result.user;
-    
         const userRef = ref(db, "users/" + user.uid);
     
-        // Check if user already exists (avoid overwrite)
         const snapshot = await get(userRef);
         if (!snapshot.exists()) {
           await set(userRef, {
-            displayName: user.displayName,
+            userName: user.displayName,
             email: user.email,
           });
         }
-    
-        // then go to chat
         nav("/chat");
     } catch (error) {
       alert(error.message);

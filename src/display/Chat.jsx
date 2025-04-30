@@ -1,26 +1,16 @@
-import { auth } from "../firebase"
-import { signOut } from "firebase/auth"
-import { useNavigate } from "react-router-dom"
+import { SideBar } from "../comp/SideBar"
+import { Chatcon } from "../comp/Chatcon"
+import "../css/Chat.css"
+import logo from "../assets/logonobg_1.png"
 
 export const Chat = () => {
-    const nav = useNavigate();
-    const SignOut = async() => {
-        try{
-            await signOut(auth);
-            nav('/')
-        }catch(error){
-            alert(error.message);
-        }
-    }
-
-    return (
-        <div>
-            <h1>
-                Icell sayang kuu
-            </h1>
-                <button onClick={SignOut}>
-                    Sign Out
-                </button>
+  return (
+    <div className="chat-app">
+        <img className="logo" src={logo} />
+        <div className="container">
+            <SideBar />
+            <Chatcon /> 
         </div>
-    )
-}
+    </div>
+  );
+};

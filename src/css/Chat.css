@@ -1,0 +1,79 @@
+.chat-app{
+    background-color:white;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container{
+    border: 1px solid black;
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.chatcon{
+    flex: 2;
+}
+
+.sidebar{
+    flex: 1;
+    border-right: 1px solid black;
+    background-color: rgb(216, 216, 215);
+}
+
+.logo{
+    width: 40px;
+    display: flex;
+}
+
+.profile-photo {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+.nav-bar{
+    background-color: darkkhaki;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.userinfo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .people-container {
+    height: 100%;
+  }
+  
+  .people-header h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+    color: #1f2937;
+  }
+  
+  .people-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .chat-info {
+    padding: 10px;
+    border-radius: 5%;
+    background-color: #f3f4f6;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .chat-info:hover {
+    background-color: #e0e7ff;
+  }
+  
