@@ -31,10 +31,10 @@ export const SignIn = ()  =>{
             <input placeholder="Email" value={email} onChange={(e)=>setEmail(e.target.value)} required/>
             <input placeholder="Password" type="password" value={password} onChange={(e)=> setPass(e.target.value)} required/>
             <button onClick={SignIn}>Sign In</button>
-            <Link to='/signup'>
-            <button>Register</button>
-            </Link>
             <button onClick={googleSignIn}>Sign In With Google</button>
+            <Link to='/signup'>
+                <button>Register</button>
+            </Link>
         </div>
     )
 }
