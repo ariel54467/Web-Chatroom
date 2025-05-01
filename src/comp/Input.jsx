@@ -7,15 +7,14 @@ import send from "../assets/send.png";
 
 export const Input = () => {
   const [message, setMessage] = useState("");
-  const [media, setMedia] = useState(null); // Added state for media preview
-  const [mediaPreview, setMediaPreview] = useState(null); // For showing preview before sending
+  const [media, setMedia] = useState(null); 
+  const [mediaPreview, setMediaPreview] = useState(null); 
   const { selectedChatId } = useChat();
 
-  // Handle media (image/video) change
   const handleMediaChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 500 * 1024) {  // Limit file size to 500KB
+      if (file.size > 500 * 1024) {  
         alert('Please select an image smaller than 500KB');
         return;
       }
@@ -24,15 +23,14 @@ export const Input = () => {
       reader.onload = (event) => {
         setMedia({
           base64: event.target.result,
-          type: file.type, // e.g., image/png, video/mp4
+          type: file.type, 
         });
-        setMediaPreview(URL.createObjectURL(file)); // Set media preview
+        setMediaPreview(URL.createObjectURL(file)); 
       };
       reader.readAsDataURL(file);
     }
   };
 
-  // Send message with or without media
   const sendMessage = () => {
     if (!selectedChatId || (message.trim() === "" && !media)) return;
 
@@ -44,19 +42,16 @@ export const Input = () => {
       timestamp: serverTimestamp(),
     };
 
-    // If there's media (image/video), add it to the message
     if (media) {
       messageData.mediaBase64 = media.base64;
       messageData.mediaType = media.type;
     }
 
-    // Send the message to Firebase
     push(msgRef, messageData);
 
-    // Clear the input and media
     setMessage("");
     setMedia(null);
-    setMediaPreview(null); // Reset preview
+    setMediaPreview(null); 
   };
 
   return (
@@ -68,7 +63,7 @@ export const Input = () => {
         onKeyDown={(e) => e.key === "Enter" && sendMessage()}
       />
       
-      {/* Add file input for image/video */}
+
       <input
         type="file"
         accept="image/*,video/*"

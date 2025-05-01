@@ -81,17 +81,38 @@ export const AddProfile = () => {
     setSuccess('');
     setLoading(true);
 
+    // Validate required fields
+    if (!userName) {
+      setError('Display name is required');
+      setLoading(false);
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!email || !emailRegex.test(email)) {
+      setError('Please enter a valid email');
+      setLoading(false);
+      return;
+    }
+
+    // Validate phone number (must be numeric)
+    if (phoneNum && isNaN(phoneNum)) {
+      setError('Phone number must be numeric');
+      setLoading(false);
+      return;
+    }
+
+    // Validate profile photo
+    if (!photoBase64) {
+      setError('Profile photo is required');
+      setLoading(false);
+      return;
+    }
+
     try {
       const user = auth.currentUser;
       if (!user) throw new Error('User not authenticated');
-
-      if (!userName || !email) {
-        throw new Error('Display name and email are required');
-      }
-
-      if (!photoBase64) {
-        throw new Error('Profile photo is required');
-      }
 
       await updateProfile(user, {
         displayName: userName,
@@ -127,7 +148,7 @@ export const AddProfile = () => {
   return (
     <div className="profile-wrapper">
       <img src={logo} alt="Logo" className="profile-logo" />
-      
+
       <form onSubmit={handleSubmit} className="profile-card">
         <h2>Profile Settings</h2>
         <p className="subtext">Update your personal information</p>
@@ -221,7 +242,7 @@ export const AddProfile = () => {
           >
             {loading ? 'Saving...' : 'Save Changes'}
           </button>
-          
+
           <button
             type="button"
             className="secondary-btn"

@@ -3,7 +3,6 @@ import { auth, db } from "../firebase";
 import { ref, onValue } from "firebase/database";
 import "../css/ChatBubble.css";
 
-// Helper function to format timestamp
 const formatTimestamp = (timestamp) => {
   if (!timestamp) return "";
 
@@ -34,7 +33,6 @@ export const ChatBubble = ({ msg }) => {
     return () => unsubscribe();
   }, [msg.sender]);
 
-  // Check if the message contains media
   const hasMedia = msg.mediaBase64;
   const formattedTimestamp = msg.timestamp ? formatTimestamp(msg.timestamp) : null;
 
@@ -71,7 +69,6 @@ export const ChatBubble = ({ msg }) => {
         </div>
       )}
 
-      {/* Display Timestamp */}
       {formattedTimestamp && (
         <div className="message-timestamp">
           {formattedTimestamp}
