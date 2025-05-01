@@ -41,6 +41,7 @@ This **Chatroom Application** enables users to sign up, sign in (via Google or e
    - Navigate to the correct project directory and run:
    ```bash
    npm install
+   npm install react-router-dom
    npm run build
    npm run dev
 
