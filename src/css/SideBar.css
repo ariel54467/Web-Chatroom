@@ -1,4 +1,4 @@
-/* Desktop (default) */
+
 .sidebar {
     width: 280px;
     min-width: 240px;
@@ -11,7 +11,7 @@
     transition: all 0.3s ease;
   }
   
-  /* Tablet: use full width row layout for sidebar */
+
   @media screen and (max-width: 1024px) {
     .sidebar {
       width: 100%;
@@ -24,8 +24,7 @@
       overflow-y: hidden;
     }
   }
-  
-  /* Mobile: stack vertically again for better use of screen height */
+
   @media screen and (max-width: 600px) {
     .sidebar {
       flex-direction: column;

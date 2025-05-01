@@ -32,7 +32,6 @@
     background-color: #f3f4f6;
 }
 
-/* Empty state styling */
 .chatcon.empty {
     display: flex;
     align-items: center;
@@ -47,7 +46,6 @@
     padding: 0 20px;
 }
 
-/* Responsive */
 @media screen and (max-width: 768px) {
     .chatcon-header h3 {
         font-size: 16px;
