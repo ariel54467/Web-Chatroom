@@ -50,7 +50,7 @@
     outline: none;
   }
   
-  .primary-btn {
+  .signupbtn {
     width: 100%;
     padding: 12px;
     background-color: #0a66c2;
@@ -62,7 +62,7 @@
     margin-top: 10px;
   }
   
-  .primary-btn:hover {
+  .signupbtn:hover {
     background-color: #004182;
   }
   
@@ -86,7 +86,7 @@
       font-size: 20px;
     }
   
-    .primary-btn {
+    .signupbtn {
       font-size: 14px;
       padding: 10px;
     }

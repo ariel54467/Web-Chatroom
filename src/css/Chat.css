@@ -1,7 +1,7 @@
 .chat-app {
   display: flex;
   flex-direction: column;
-  height: 95vh;
+  height: 100vh;
   background-color: #f4f6f8;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -17,11 +17,12 @@
 
 .logo {
   height: 32px;
+  width: auto;
 }
 
 .ch-but-con {
   display: flex;
-  gap: 10px;
+  gap: 12px;
 }
 
 .add-button {
@@ -46,6 +47,24 @@
   overflow: hidden;
 }
 
+.sidebar {
+  width: 200px;
+  min-width: 180px;
+  background-color: #fff;
+  border-right: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.chatcon {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #f9fafb;
+}
+
 @media screen and (max-width: 768px) {
   .chat-header {
     flex-direction: column;
@@ -56,12 +75,45 @@
   .ch-but-con {
     width: 100%;
     justify-content: flex-end;
-    gap: 8px;
+    gap: 10px;
   }
 
   .add-button {
     width: auto;
     font-size: 13px;
     padding: 8px 12px;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-width: unset;
+    flex-direction: row;
+    overflow-x: auto;
+    border-bottom: 1px solid #e0e0e0;
+    border-right: none;
+  }
+
+  .container {
+    flex-direction: column;
+  }
+
+  .chatcon {
+    flex: 1;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .logo {
+    height: 24px;
+  }
+
+  .add-button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .ch-but-con {
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
 }

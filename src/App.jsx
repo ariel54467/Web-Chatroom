@@ -4,6 +4,7 @@ import { Home } from './display/Home';
 import { SignUp } from './display/SignUp';
 import { Chat } from './display/Chat';
 import { Context } from './comp/Context';
+import { AddProfile } from './comp/AddProfile';
 
 function App() {
   
@@ -15,6 +16,7 @@ function App() {
         <Route path='/signin' element={<SignIn />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/chat' element={<Chat />} />
+        <Route path='/edit' element={<AddProfile />} />
       </Routes>
       </Context>
   )

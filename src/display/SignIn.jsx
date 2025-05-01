@@ -22,6 +22,9 @@ export const SignIn = () => {
           await set(userRef, {
             userName: user.displayName,
             email: user.email,
+            phoneNum: null, 
+            address: null,
+            photoURL: user.photoURL
           });
         }
         nav("/chat");
@@ -64,7 +67,7 @@ export const SignIn = () => {
           required
         />
 
-        <button className="primary-btn" type="submit">Sign In</button>
+        <button className="signbtn" type="submit">Sign In</button>
 
         <div className="divider"><span>or</span></div>
 

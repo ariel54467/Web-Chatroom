@@ -60,3 +60,34 @@
     }
   }
   
+  .media-preview {
+    margin-top: 10px;
+    text-align: center;
+  }
+  
+  .media-preview-image {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 8px;
+  }
+  
+  .media-preview-video {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 8px;
+  }
+  
+  .remove-media-btn {
+    background-color: #ff4f4f;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    border: none;
+  }
+  
+  .remove-media-btn:hover {
+    background-color: #ff1f1f;
+  }
+  

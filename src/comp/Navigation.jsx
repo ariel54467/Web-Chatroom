@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
 import { ref, onValue } from "firebase/database";
 import { onAuthStateChanged } from "firebase/auth";
-import "../css/Navigation.css"
+import { Link } from 'react-router-dom';
+import "../css/Navigation.css";
+import profile from "../assets/default-avatar.png"
 
-
-export const Navigation = () =>{
+export const Navigation = () => {
     const [displayName, setDisplayName] = useState("");
     const [photo, setPhoto] = useState(null);
   
@@ -15,12 +16,16 @@ export const Navigation = () =>{
           const userRef = ref(db, `users/${user.uid}`);
           onValue(userRef, (snapshot) => {
             const data = snapshot.val();
-            setDisplayName(data?.userName || user.email);
+            setDisplayName(data?.userName || user.displayName || user.email);
+            
+            if (data?.photoBase64) {
+              setPhoto(data.photoBase64);
+            } else if (user.photoURL) {
+              setPhoto(user.photoURL);
+            } else {
+              setPhoto(`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(data?.userName || 'User')}`);
+            }
           });
-  
-          if (user.photoURL) {
-            setPhoto(user.photoURL);
-          }
         }
       });
   
@@ -29,10 +34,19 @@ export const Navigation = () =>{
   
     return (
       <div className="nav-bar">
-        <div className="userinfo">
-          <img src={photo} className="profile-photo" />
-          <span className="userinfo">{displayName}</span>
-        </div>
+        <Link to='/edit'>
+          <div className="userinfo">
+            <img 
+              src={photo || profile} 
+              className="profile-photo" 
+              alt="Profile"
+              onError={(e) => {
+                e.target.src = {profile};
+              }}
+            />
+            <span className="username">{displayName}</span>
+          </div>
+        </Link>
       </div>
     );
-}
+};

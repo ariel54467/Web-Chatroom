@@ -7,15 +7,26 @@ import { AddMenu } from "../comp/AddMenu";
 import { signOut, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
+import { useChat } from "../comp/ChatContext";
 
 export const Chat = () => {
   const [showAddMenu, setShowAddMenu] = useState(false);
   const [isAuthReady, setIsAuthReady] = useState(false);
   const navigate = useNavigate();
+  const { resetChatId } = useChat();
 
+  useEffect(() => {
+    if ("Notification" in window && Notification.permission !== "granted") {
+      Notification.requestPermission().then((permission) => {
+        console.log("Notification permission:", permission);
+      });
+    }
+  }, []);
+  
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (!user) {
+        resetChatId();
         navigate("/signin");
       } else {
         setIsAuthReady(true);
@@ -23,11 +34,12 @@ export const Chat = () => {
     });
 
     return () => unsub();
-  }, [navigate]);
+  }, [navigate,resetChatId]);
 
   const SignOut = async () => {
     try {
       await signOut(auth);
+      resetChatId();
       navigate("/signin");
     } catch (error) {
       alert(error.message);
