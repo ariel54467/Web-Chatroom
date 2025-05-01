@@ -3,6 +3,20 @@ import { auth, db } from "../firebase";
 import { ref, onValue } from "firebase/database";
 import "../css/ChatBubble.css";
 
+// Helper function to format timestamp
+const formatTimestamp = (timestamp) => {
+  if (!timestamp) return "";
+
+  const date = new Date(timestamp);
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const ampm = hours >= 12 ? "PM" : "AM";
+  const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+
+  return `${formattedHours}:${formattedMinutes} ${ampm}`;
+};
+
 export const ChatBubble = ({ msg }) => {
   const isMe = msg.sender === auth.currentUser?.email;
   const [displayName, setDisplayName] = useState(msg.sender);
@@ -22,6 +36,7 @@ export const ChatBubble = ({ msg }) => {
 
   // Check if the message contains media
   const hasMedia = msg.mediaBase64;
+  const formattedTimestamp = msg.timestamp ? formatTimestamp(msg.timestamp) : null;
 
   return (
     <div
@@ -40,7 +55,6 @@ export const ChatBubble = ({ msg }) => {
       </div>
       <div>{msg.text}</div>
 
-      {/* Render media (image/video) if it exists */}
       {hasMedia && (
         <div className="media-container">
           {msg.mediaType.startsWith("image") ? (
@@ -54,6 +68,13 @@ export const ChatBubble = ({ msg }) => {
               <source src={msg.mediaBase64} type={msg.mediaType} />
             </video>
           ) : null}
+        </div>
+      )}
+
+      {/* Display Timestamp */}
+      {formattedTimestamp && (
+        <div className="message-timestamp">
+          {formattedTimestamp}
         </div>
       )}
     </div>

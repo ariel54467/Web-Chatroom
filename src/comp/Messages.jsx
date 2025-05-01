@@ -20,19 +20,20 @@ export const Messages = () => {
       const msgList = data ? Object.values(data) : [];
 
       msgList.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
-      
-      // Get latest message
+
       const lastMsg = msgList[msgList.length - 1];
 
-  
       if (
         lastMsg &&
-        lastMsg.sender !== auth.currentUser?.email &&
-        Notification.permission === "granted" &&
-        document.visibilityState !== "visible"
+        lastMsg.sender !== auth.currentUser?.email &&  
+        Notification.permission === "granted" && 
+        document.visibilityState !== "visible" 
       ) {
+
         new Notification("New Message", {
           body: `${lastMsg.sender}: ${lastMsg.text}`,
+          icon: "/src/assets/logonobg_1.png", 
+          tag: `chat-notification-${selectedChatId}`, 
         });
       }
 
