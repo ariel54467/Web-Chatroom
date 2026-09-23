@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.1",
+    "emoji-picker-react": "^4.22.2",
     "firebase": "^11.6.1",
     "lucide-react": "^1.47.0",
     "react": "^19.0.0",

@@ -1,6 +1,6 @@
 import { after, before, beforeEach, test } from "node:test";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import { PGlite } from "@electric-sql/pglite";
 
 const db = new PGlite();
@@ -10,7 +10,7 @@ const carol = "00000000-0000-4000-8000-000000000003";
 const messageId = "00000000-0000-4000-8000-000000000011";
 before(async () => {
   await db.exec(`
-    create role anon; create role authenticated;
+    create role anon; create role authenticated; create role service_role;
     create schema auth; create schema storage;
     create table auth.users(id uuid primary key,raw_user_meta_data jsonb default '{}');
     create function auth.uid() returns uuid language sql stable as
@@ -24,11 +24,14 @@ before(async () => {
     grant select,insert,delete on storage.objects to authenticated;
     grant usage on sequence storage.objects_id_seq to authenticated;
   `);
-  await db.exec(await readFile(new URL("../supabase/migrations/001_messenger.sql", import.meta.url), "utf8"));
+  const migrations = new URL("../supabase/migrations/", import.meta.url);
+  for (const file of (await readdir(migrations)).filter(name => name.endsWith(".sql")).sort()) {
+    await db.exec(await readFile(new URL(file, migrations), "utf8"));
+  }
 });
 after(async () => { await db.close(); });
 beforeEach(async () => {
-  await db.exec("truncate auth.users,profiles,friend_requests,blocks,rooms,room_members,group_invites,messages,typing,storage.objects cascade;");
+  await db.exec("truncate auth.users,profiles,friend_requests,blocks,rooms,room_members,group_invites,messages,typing,storage.objects,push_subscriptions,push_log cascade;");
   for (const [id,name] of [[alice,"alice"],[bob,"bob"],[carol,"carol"]]) {
     await db.query("insert into auth.users(id) values($1)", [id]);
     await as(id, "select public.save_profile($1,$2)", [name, name.toUpperCase()]);
@@ -115,11 +118,16 @@ test("only admins remove members, and removal revokes history and file access", 
   assert.equal((await as(bob,"select * from storage.objects")).rows.length,0);
   await assert.rejects(as(bob,"select send_message(gen_random_uuid(),$1,'Hello')",[room]),/cannot send/);
 });
-test("uploads check identity, membership, file sizes, and owner leaving transfers ownership", async () => {
+test("uploads check identity and membership, sends check file sizes, and owner leaving transfers ownership", async () => {
   const room=await group(); await join(room);
   const path=`${room}/${alice}/${messageId}/photo.png`;
-  await assert.rejects(as(carol,"insert into storage.objects(bucket_id,name,metadata) values('chat-media',$1,$2)",[path,{size:100,mimetype:"image/png"}]),/row-level security/);
-  await assert.rejects(as(alice,"insert into storage.objects(bucket_id,name,metadata) values('chat-media',$1,$2)",[path,{size:6000000,mimetype:"image/png"}]),/row-level security/);
+  // Supabase Storage checks the insert policy before it records the file's metadata.
+  const upload=(user,name)=>as(user,"insert into storage.objects(bucket_id,name) values('chat-media',$1)",[name]);
+  await assert.rejects(upload(carol,`${room}/${carol}/${messageId}/photo.png`),/row-level security/);
+  await assert.rejects(upload(bob,path),/row-level security/);
+  await upload(alice,path);
+  await db.query("update storage.objects set metadata=$2 where name=$1",[path,{size:6000000,mimetype:"image/png"}]);
+  await assert.rejects(as(alice,"select send_message($1,$2,'','image',$3,'photo.png')",[messageId,room,path]),/Unsupported file type or size/);
   await as(alice,"select manage_group($1,null,'leave')",[room]);
   assert.equal((await as(bob,"select * from room_members where user_id=$1",[bob])).rows[0].role,"owner");
 });
@@ -127,4 +135,55 @@ test("media cannot be sent before upload and anonymous RPC access is denied", as
   const room=await group();
   await assert.rejects(as(alice,"select send_message($1,$2,'','image',$3,'photo.png')",[messageId,room,`${room}/${alice}/${messageId}/photo.png`]),/Upload the attachment/);
   await assert.rejects(db.transaction(async tx => { await tx.exec("set local role anon"); return tx.query("select list_rooms()"); }),/permission denied/);
+});
+test("devices can only be registered and removed by their owner", async () => {
+  const endpoint="https://push.example.test/device-1";
+  await as(alice,"select save_push_subscription($1,'key','secret')",[endpoint]);
+  await as(bob,"select delete_push_subscription($1)",[endpoint]);
+  assert.equal((await db.query("select user_id from push_subscriptions")).rows[0].user_id,alice);
+  await assert.rejects(as(bob,"select * from push_subscriptions"),/permission denied/);
+  // A shared device notifies whoever turned notifications on there last.
+  await as(bob,"select save_push_subscription($1,'key2','secret2')",[endpoint]);
+  assert.equal((await db.query("select user_id from push_subscriptions")).rows[0].user_id,bob);
+  await as(bob,"select delete_push_subscription($1)",[endpoint]);
+  assert.equal((await db.query("select * from push_subscriptions")).rows.length,0);
+  await assert.rejects(as(alice,"select save_push_subscription('http://insecure.test/x','key','secret')"),/check constraint/);
+});
+test("only the sender claims a push, once, and only members other than the sender are notified", async () => {
+  const room=await group(); await join(room);
+  for (const [user,name] of [[alice,"a"],[bob,"b"],[carol,"c"]]) {
+    await as(user,"select save_push_subscription($1,'key','secret')",[`https://push.example.test/${name}`]);
+  }
+  await as(alice,"select send_message($1,$2,'Hello team')",[messageId,room]);
+  assert.equal((await as(bob,"select claim_push($1) as push",[messageId])).rows[0].push,null);
+  const push=(await as(alice,"select claim_push($1) as push",[messageId])).rows[0].push;
+  assert.equal(push.title,"Study group");
+  assert.equal(push.body,"ALICE: Hello team");
+  assert.equal(push.url,`/chat?chat=${room}`);
+  assert.deepEqual(push.subscriptions,[{endpoint:"https://push.example.test/b",p256dh:"key",auth:"secret"}]);
+  assert.equal((await as(alice,"select claim_push($1) as push",[messageId])).rows[0].push,null);
+});
+test("private-chat pushes show the sender's name, media previews, and skip old messages", async () => {
+  await friends();
+  const room=(await as(alice,"select open_direct($1) as id",[bob])).rows[0].id;
+  await as(bob,"select save_push_subscription('https://push.example.test/b','key','secret')");
+  const path=`${room}/${alice}/${messageId}/photo.png`;
+  await db.query("insert into storage.objects(bucket_id,name,metadata) values('chat-media',$1,$2)",[path,{size:1024,mimetype:"image/png"}]);
+  await as(alice,"select send_message($1,$2,'','image',$3,'photo.png')",[messageId,room,path]);
+  const push=(await as(alice,"select claim_push($1) as push",[messageId])).rows[0].push;
+  assert.equal(push.title,"ALICE");
+  assert.equal(push.body,"📷 Photo");
+  const old="00000000-0000-4000-8000-000000000012";
+  await as(alice,"select send_message($1,$2,'Earlier')",[old,room]);
+  await db.query("update messages set created_at=now()-interval '10 minutes' where id=$1",[old]);
+  assert.equal((await as(alice,"select claim_push($1) as push",[old])).rows[0].push,null);
+});
+test("only the Edge Function's service role can forget devices", async () => {
+  await as(alice,"select save_push_subscription('https://push.example.test/a','key','secret')");
+  await assert.rejects(as(alice,"select forget_push_subscriptions(array['https://push.example.test/a'])"),/permission denied/);
+  await db.transaction(async tx => {
+    await tx.exec("set local role service_role");
+    await tx.query("select forget_push_subscriptions(array['https://push.example.test/a'])");
+  });
+  assert.equal((await db.query("select * from push_subscriptions")).rows.length,0);
 });

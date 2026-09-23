@@ -9,6 +9,8 @@ import { clockTime } from "./format";
 import { Profile } from "./Profile";
 import { Contacts, Requests } from "./Contacts";
 import { GroupForm } from "./Groups";
+import { NotificationToggle } from "./Notifications";
+import { disablePush } from "../services/push";
 import { Conversation } from "./Conversation";
 import logo from "../assets/logonobg_1.png";
 
@@ -70,15 +72,32 @@ export default function Messenger() {
     };
   }, [user.id, refresh]);
 
+  // Clicking a notification while the app is open switches to that chat.
+  useEffect(() => {
+    const worker = navigator.serviceWorker;
+    const openChat = event => { if (event.data?.type === "open-chat" && event.data.room) { setView("chats"); setParams({ chat: event.data.room }); } };
+    worker?.addEventListener("message", openChat);
+    return () => worker?.removeEventListener("message", openChat);
+  }, [setParams]);
+  const unread = rooms.reduce((sum, r) => sum + Number(r.unread), 0);
+  useEffect(() => {
+    document.title = unread ? `(${unread > 99 ? "99+" : unread}) Chatterly` : "Chatterly";
+    // Installed apps also show the count on their icon.
+    void (unread ? navigator.setAppBadge?.(unread) : navigator.clearAppBadge?.())?.catch(() => {});
+  }, [unread]);
+  useEffect(() => () => { document.title = "Chatterly"; }, []);
+
   function open(id) { setView("chats"); setParams({ chat: id }); }
   async function signOut() {
+    // Stop this device getting the account's notifications once signed out.
+    await disablePush().catch(() => {});
     const { error: signOutError } = await supabase.auth.signOut();
     if (signOutError) setError(signOutError.message);
   }
   const requestCount = social.requests.filter(r => r.recipient_id === user.id).length + social.invites.length;
   const filtered = rooms.filter(room => room.name.toLowerCase().includes(search.toLowerCase()) && (!unreadOnly || room.unread > 0));
   const tabs = [
-    { id: "chats", name: "Chats", icon: MessageCircle, count: rooms.reduce((sum, r) => sum + Number(r.unread), 0) },
+    { id: "chats", name: "Chats", icon: MessageCircle, count: unread },
     { id: "contacts", name: "Contacts", icon: Users },
     { id: "requests", name: "Requests", icon: Inbox, count: requestCount },
     { id: "profile", name: "Profile", icon: UserRound },
@@ -88,7 +107,7 @@ export default function Messenger() {
     <header className="app-header">
       <div className="brand"><img src={logo} alt="" /><span>Chatterly</span></div>
       <span className={`connection ${online && connection === "live" ? "live" : ""}`} role="status">{!online ? "Offline" : connection === "live" ? "Connected" : "Connecting..."}</span>
-      <div className="header-actions"><button className="button primary" onClick={() => setCreateGroup(true)} disabled={!profile?.username}><Plus size={18} /><span>New group</span></button><IconButton label="Sign out" onClick={signOut}><LogOut size={18} /></IconButton></div>
+      <div className="header-actions"><NotificationToggle onError={setError} /><button className="button primary" onClick={() => setCreateGroup(true)} disabled={!profile?.username}><Plus size={18} /><span>New group</span></button><IconButton label="Sign out" onClick={signOut}><LogOut size={18} /></IconButton></div>
     </header>
     <div className="app-body">
       <nav className="navigation-rail" aria-label="Main navigation">
