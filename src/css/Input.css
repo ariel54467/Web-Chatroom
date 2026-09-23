@@ -1,62 +1,70 @@
 .input-container {
-    display: flex;
-    align-items: center;
-    padding: 8px 12px;
-    gap: 8px;
-    width: 100%;
-  }
-  
-  .input-container input {
-    flex: 1;
-    height: 32px;
-    padding-top: 20px;
-    font-size: 20px;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: #111827;
-  }
-  
-  .input-container input::placeholder {
-    color: rgba(0, 0, 0, 0.4);
-    font-size: 14px;
-  }
-  
-  .input-container button {
-    height: 32px;
-    width: 32px;
-    background: transparent;
-    border: none;
-    border-radius: 50%;
-    padding: 0;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s ease;
-  }
-  
-  
-  .input-container button img {
-    height: 32px;
-    width: 32px;
-    object-fit: contain;
-  }
+  display: flex;
+  width: 100%;
+  min-height: 46px;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 5px 5px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8fafb;
+}
 
-  @media screen and (max-width: 600px) {
-    .input-container {
-      flex-direction: column;
-      align-items: stretch;
-    }
-  
-    .input-container input,
-    .input-container button {
-      width: 100%;
-    }
-  
-    .input-container button {
-      margin-top: 6px;
-      border-radius: 6px;
-    }
-  }
-  
+.input-container:focus-within {
+  border-color: var(--brand);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(40, 120, 200, 0.12);
+}
+
+.input-container input {
+  min-width: 0;
+  height: 34px;
+  flex: 1;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+}
+
+.input-container input::placeholder {
+  color: #85919a;
+}
+
+.input-container button {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: var(--brand);
+  cursor: pointer;
+  transition: background-color 140ms ease, opacity 140ms ease;
+}
+
+.input-container button:hover:not(:disabled) {
+  background: var(--brand-dark);
+}
+
+.input-container button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.input-container button span {
+  color: #ffffff;
+  font-size: 19px;
+  line-height: 1;
+  transform: rotate(-12deg);
+}
+
+.send-error {
+  margin: 7px 4px 0;
+  color: #a23d2c;
+  font-size: 12px;
+}

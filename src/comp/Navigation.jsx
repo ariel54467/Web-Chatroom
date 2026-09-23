@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
 import { ref, onValue } from "firebase/database";
 import { onAuthStateChanged } from "firebase/auth";
@@ -10,28 +10,52 @@ export const Navigation = () =>{
     const [photo, setPhoto] = useState(null);
   
     useEffect(() => {
+      let unsubscribeUser = () => {};
+
       const unsubscribe = onAuthStateChanged(auth, (user) => {
+        unsubscribeUser();
+
         if (user) {
+          const fallbackName = user.displayName || user.email || "Member";
+          setDisplayName(fallbackName);
           const userRef = ref(db, `users/${user.uid}`);
-          onValue(userRef, (snapshot) => {
+          unsubscribeUser = onValue(userRef, (snapshot) => {
             const data = snapshot.val();
-            setDisplayName(data?.userName || user.email);
+            setDisplayName(data?.userName || fallbackName);
+          }, () => {
+            setDisplayName(fallbackName);
           });
-  
-          if (user.photoURL) {
-            setPhoto(user.photoURL);
-          }
+
+          setPhoto(user.photoURL || null);
         }
       });
   
-      return () => unsubscribe();
+      return () => {
+        unsubscribe();
+        unsubscribeUser();
+      };
     }, []);
+
+    const initial = displayName.trim().charAt(0).toUpperCase() || "?";
   
     return (
       <div className="nav-bar">
         <div className="userinfo">
-          <img src={photo} className="profile-photo" />
-          <span className="userinfo">{displayName}</span>
+          {photo ? (
+            <img
+              src={photo}
+              className="profile-photo"
+              alt=""
+              referrerPolicy="no-referrer"
+              onError={() => setPhoto(null)}
+            />
+          ) : (
+            <span className="profile-photo profile-fallback" aria-hidden="true">{initial}</span>
+          )}
+          <span className="user-details">
+            <strong>{displayName || "Loading..."}</strong>
+            <small>Signed in</small>
+          </span>
         </div>
       </div>
     );

@@ -1,53 +1,66 @@
 .nav-bar {
-    padding: 8px;
-    border-bottom: 1px solid #e0e0e0;
-    background-color: #f9fafb;
+  display: flex;
+  align-items: center;
+  min-height: 76px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  background: #f8fafb;
 }
 
 .userinfo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
 }
 
 .profile-photo {
-    width: 48px;
-    height: 48px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 2px solid #4f46e5;
+  display: block;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px var(--line);
 }
 
-
-.userinfo span {
-    font-size: 16px;
-    font-weight: 600;
-    color: #333;
+.profile-fallback {
+  display: grid;
+  place-items: center;
+  background: #2d8078;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
 }
 
-@media screen and (max-width: 768px) {
-    .nav-bar {
-        padding: 12px;
-    }
-
-    .profile-photo {
-        width: 40px;
-        height: 40px;
-    }
-
-    .userinfo span {
-        font-size: 14px;
-    }
+.user-details {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 3px;
 }
 
-@media screen and (max-width: 480px) {
-    .userinfo {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+.user-details strong {
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-    .userinfo span {
-        margin-top: 6px;
-        font-size: 13px;
-    }
+.user-details small {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #4f756f;
+  font-size: 12px;
+}
+
+.user-details small::before {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2d8078;
+  content: "";
 }

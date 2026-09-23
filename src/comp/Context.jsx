@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { ChatContext } from "./ChatContext";
 
 export const Context = ({ children }) => {
-  const [selectedChatId, setselectedChatId] = useState(null);
+  const [selectedChatId, setSelectedChatId] = useState(null);
 
   return (
-    <ChatContext.Provider value={{ selectedChatId, setselectedChatId }}>
+    <ChatContext.Provider value={{ selectedChatId, setSelectedChatId }}>
       {children}
     </ChatContext.Provider>
   );

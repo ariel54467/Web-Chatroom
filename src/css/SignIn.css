@@ -76,6 +76,16 @@
     cursor: pointer;
   }
 
+  .signin-card button:disabled {
+    opacity: 0.65;
+    cursor: wait;
+  }
+
+  .signin-card .error-text {
+    overflow-wrap: anywhere;
+    line-height: 1.5;
+  }
+
   .divider {
     text-align: center;
     margin: 20px 0;
@@ -144,4 +154,3 @@
     width: 120px;
     z-index: 10;
   }
-  

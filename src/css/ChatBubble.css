@@ -1,57 +1,81 @@
+.message-row {
+  display: flex;
+  width: 100%;
+  align-items: flex-end;
+  gap: 8px;
+  margin: 3px 0;
+}
+
+.message-row.right {
+  justify-content: flex-end;
+}
+
+.message-avatar {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  place-items: center;
+  border-radius: 50%;
+  background: #2d8078;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
 .chat-bubble {
-    max-width: 75%;
-    padding: 10px 14px;
-    border-radius: 16px;
-    margin: 8px 12px;
-    display: flex;
-    flex-direction: column;
-    word-wrap: break-word;
-    font-size: 15px;
-  }
+  display: flex;
+  max-width: min(70%, 620px);
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px 12px 8px;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(31, 41, 51, 0.08);
+  overflow-wrap: anywhere;
+}
 
-  .chat-bubble.left {
-    align-self: flex-start;
-    background-color: #e5e7eb;
-    color: #111827;
-    border-top-left-radius: 0;
-  }
-  
-  .chat-bubble.right {
-    align-self: flex-end;
-    background-color: #4f46e5;
-    color: white;
-    border-top-right-radius: 0;
-  }
-  
-  .sender-name {
-    font-size: 13px;
-    font-weight: 600;
-    color: rgba(0, 0, 0, 0.5);
-    margin-bottom: 4px;
-  }
-  
-  .chat-bubble.right .sender-name {
-    color: rgba(255, 255, 255, 0.7);
-  }
-  
-  .bubble-text {
-    font-size: 15px;
-    line-height: 1.4;
-  }
+.chat-bubble.left {
+  border: 1px solid #dfe5e9;
+  border-bottom-left-radius: 2px;
+  background: #ffffff;
+  color: var(--ink);
+}
 
-  @media screen and (max-width: 600px) {
-    .chat-bubble {
-      max-width: 90%;
-      padding: 8px 12px;
-      font-size: 14px;
-    }
-  
-    .sender-name {
-      font-size: 12px;
-    }
-  
-    .bubble-text {
-      font-size: 14px;
-    }
+.chat-bubble.right {
+  border-bottom-right-radius: 2px;
+  background: var(--brand);
+  color: #ffffff;
+}
+
+.sender-name {
+  color: #53616c;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.chat-bubble.right .sender-name {
+  color: #dbeafa;
+}
+
+.bubble-text {
+  font-size: 14px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.message-time {
+  align-self: flex-end;
+  color: #74818b;
+  font-size: 10px;
+  line-height: 1.2;
+}
+
+.chat-bubble.right .message-time {
+  color: #dbeafa;
+}
+
+@media (max-width: 720px) {
+  .chat-bubble {
+    max-width: 82%;
   }
-  
+}

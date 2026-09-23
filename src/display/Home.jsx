@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import '../css/Home.css';
 import logo from '../assets/logo.png';
+import bgVideo from '../assets/bg.mp4';
 
 export const Home = () => {
   return (
@@ -9,7 +10,7 @@ export const Home = () => {
  <div className="home-left">
   <div className="video-cube-wrapper">
     <video autoPlay loop muted className="background-video">
-      <source src="/src/assets/bg.mp4" type="video/mp4" />
+      <source src={bgVideo} type="video/mp4" />
     </video>
 
     <div className="scene">

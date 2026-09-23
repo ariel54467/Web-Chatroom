@@ -1,38 +1,69 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { db, auth } from "../firebase";
-import { push, ref, serverTimestamp } from "firebase/database";
+import { push, ref, serverTimestamp, update } from "firebase/database";
 import { useChat } from "./ChatContext";
 import "../css/Input.css"
-import send from "../assets/send.png"
 
 export const Input = () => {
   const [message, setMessage] = useState("");
+  const [isSending, setIsSending] = useState(false);
+  const [error, setError] = useState("");
   const { selectedChatId } = useChat();
 
-  const sendMessage = () => {
-    if (!selectedChatId || message.trim() === "") return;
+  const sendMessage = async (event) => {
+    event.preventDefault();
+    const trimmedMessage = message.trim();
+    const currentUser = auth.currentUser;
 
-    const msgRef = ref(db, `chats/${selectedChatId}/messages`);
-    push(msgRef, {
-      text: message,
-      sender: auth.currentUser.email,
-      timestamp: serverTimestamp(),
-    });
+    if (!selectedChatId || !trimmedMessage || !currentUser || isSending) return;
 
-    setMessage("");
+    setIsSending(true);
+    setError("");
+
+    try {
+      const msgRef = ref(db, `chats/${selectedChatId}/messages`);
+      const newMessageRef = push(msgRef);
+      const timestamp = serverTimestamp();
+
+      await update(ref(db), {
+        [`chats/${selectedChatId}/messages/${newMessageRef.key}`]: {
+          text: trimmedMessage,
+          sender: currentUser.email,
+          senderId: currentUser.uid,
+          timestamp,
+        },
+        [`chats/${selectedChatId}/lastMessage`]: trimmedMessage,
+        [`chats/${selectedChatId}/updatedAt`]: timestamp,
+      });
+      setMessage("");
+    } catch {
+      setError("Message not sent. Check your connection and try again.");
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
-    <div className="input-container">
-      <input
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        placeholder="Type a message..."
-        onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-      />
-      <button  onClick={sendMessage}>
-          <img src={send}></img>
-      </button>
-    </div>
+    <>
+      <form className="input-container" onSubmit={sendMessage}>
+        <input
+          value={message}
+          onChange={(event) => setMessage(event.target.value)}
+          placeholder="Message this group"
+          aria-label="Message"
+          maxLength={2000}
+          disabled={isSending}
+        />
+        <button
+          type="submit"
+          disabled={!message.trim() || isSending}
+          aria-label={isSending ? "Sending message" : "Send message"}
+          title="Send message"
+        >
+          <span aria-hidden="true">{"\u27a4"}</span>
+        </button>
+      </form>
+      {error && <p className="send-error" role="alert">{error}</p>}
+    </>
   );
 };
