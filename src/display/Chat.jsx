@@ -8,6 +8,7 @@ import { signOut, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { useChat } from "../comp/ChatContext";
+import { useChat } from "../comp/ChatContext";
 
 export const Chat = () => {
   const [showAddMenu, setShowAddMenu] = useState(false);
@@ -15,7 +16,16 @@ export const Chat = () => {
   const [isSigningOut, setIsSigningOut] = useState(false);
   const { selectedChatId } = useChat();
   const navigate = useNavigate();
+  const { resetChatId } = useChat();
 
+  useEffect(() => {
+    if ("Notification" in window && Notification.permission !== "granted") {
+      Notification.requestPermission().then((permission) => {
+        console.log("Notification permission:", permission);
+      });
+    }
+  }, []);
+  
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (!user) {
@@ -27,12 +37,13 @@ export const Chat = () => {
     });
 
     return () => unsub();
-  }, [navigate]);
+  }, [navigate,resetChatId]);
 
   const SignOut = async () => {
     setIsSigningOut(true);
     try {
       await signOut(auth);
+      resetChatId();
       navigate("/signin");
     } catch (error) {
       alert(error.message);

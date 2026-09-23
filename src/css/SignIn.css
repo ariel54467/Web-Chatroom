@@ -50,7 +50,7 @@
     margin-bottom: 10px;
   }
 
-  .primary-btn {
+  .signbtn {
     width: 100%;
     padding: 12px;
     background-color: #0a66c2;
@@ -62,7 +62,7 @@
     margin-bottom: 20px;
   }
   
-  .primary-btn:hover {
+  .signbtn:hover {
     background-color: #004182;
   }
   
@@ -132,7 +132,7 @@
       font-size: 20px;
     }
   
-    .primary-btn,
+    .signbtn,
     .alt-btn {
       font-size: 14px;
       padding: 10px;

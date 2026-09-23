@@ -3,7 +3,7 @@ import { db } from "../firebase";
 import { ref, onValue } from "firebase/database";
 import { useChat } from "./ChatContext";
 import { ChatBubble } from "./ChatBubble";
-import "../css/Messages.css"
+import "../css/Messages.css";
 
 export const Messages = () => {
   const [messages, setMessages] = useState([]);
@@ -33,6 +33,23 @@ export const Messages = () => {
       const data = snapshot.val() || {};
       const msgList = Object.entries(data).map(([id, message]) => ({ id, ...message }));
       msgList.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+
+      const lastMsg = msgList[msgList.length - 1];
+
+      if (
+        lastMsg &&
+        lastMsg.sender !== auth.currentUser?.email &&  
+        Notification.permission === "granted" && 
+        document.visibilityState !== "visible" 
+      ) {
+
+        new Notification("New Message", {
+          body: `${lastMsg.sender}: ${lastMsg.text}`,
+          icon: "/src/assets/logonobg_1.png", 
+          tag: `chat-notification-${selectedChatId}`, 
+        });
+      }
+
       setMessages(msgList);
       setIsLoading(false);
       setError("");

@@ -1,0 +1,258 @@
+
+.profile-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f6f8;
+    padding: 20px;
+  }
+  
+  .profile-logo {
+    width: 150px;
+    margin-bottom: 20px;
+  }
+  
+  .profile-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+  }
+  
+  .subtext {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-top: 4px;
+  }
+  
+  .error-message,
+  .success-message {
+    background-color: #ffe0e0;
+    border: 1px solid #f0c2c2;
+    color: #c60d0d;
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .success-message {
+    background-color: #e0ffe0;
+    border: 1px solid #c2f0c2;
+    color: #0d9e0d;
+  }
+  
+  .form-group {
+    margin-top: 20px;
+  }
+  
+  label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+  }
+  
+  input,
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #333;
+    margin-top: 6px;
+  }
+  
+  textarea {
+    resize: vertical;
+  }
+  
+  input:focus,
+  textarea:focus {
+    border-color: #4f46e5;
+    outline: none;
+  }
+  
+  .profile-photo-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .profile-photo-preview {
+    width: 100px;
+    height: 100px;
+    background-color: #f0f0f0;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .profile-photo-preview span {
+    font-size: 14px;
+    color: #888;
+  }
+  
+  .photo-upload-btn,
+  .photo-remove-btn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .photo-upload-btn {
+    background-color: #4f46e5;
+    color: white;
+  }
+  
+  .photo-upload-btn:hover {
+    background-color: #4338ca;
+  }
+  
+  .photo-remove-btn {
+    background-color: #ff4f4f;
+    color: white;
+  }
+  
+  .photo-remove-btn:hover {
+    background-color: #ff1f1f;
+  }
+  
+
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .primary-btn,
+  .secondary-btn {
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 48%;
+    transition: background-color 0.3s;
+  }
+  
+  .primary-btn {
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+  }
+  
+  .primary-btn:hover {
+    background-color: #4338ca;
+  }
+  
+  .secondary-btn {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ddd;
+  }
+  
+  .secondary-btn:hover {
+    background-color: #ddd;
+  }
+  
+  .primary-btn:disabled,
+  .secondary-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .profile-loading {
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+  }
+
+  @media (max-width: 768px) {
+
+    .profile-card {
+      max-width: 90%; 
+      padding: 20px;
+    }
+  
+
+    .profile-logo {
+      width: 120px;
+    }
+  
+
+    .button-group {
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+
+    input,
+    textarea {
+      padding: 12px;
+    }
+  
+    .profile-photo-section {
+      margin-bottom: 15px;
+    }
+  
+    .profile-photo-preview {
+      width: 80px;
+      height: 80px;
+    }
+  
+    .photo-upload-btn,
+    .photo-remove-btn {
+      width: 100%;
+      padding: 10px;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+      width: 100%;
+      padding: 15px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .profile-logo {
+      width: 100px; 
+    }
+  
+    .profile-card {
+      padding: 15px;
+    }
+  
+    .profile-photo-preview {
+      width: 70px;
+      height: 70px;
+    }
+  
+    input,
+    textarea {
+      font-size: 14px;
+    }
+  }
+  

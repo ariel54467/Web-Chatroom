@@ -10,6 +10,26 @@ export const Input = () => {
   const [error, setError] = useState("");
   const { selectedChatId } = useChat();
 
+  const handleMediaChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 500 * 1024) {  
+        alert('Please select an image smaller than 500KB');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setMedia({
+          base64: event.target.result,
+          type: file.type, 
+        });
+        setMediaPreview(URL.createObjectURL(file)); 
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const sendMessage = async (event) => {
     event.preventDefault();
     const trimmedMessage = message.trim();

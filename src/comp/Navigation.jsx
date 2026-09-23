@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
 import { ref, onValue } from "firebase/database";
 import { onAuthStateChanged } from "firebase/auth";
-import "../css/Navigation.css"
+import { Link } from 'react-router-dom';
+import "../css/Navigation.css";
+import profile from "../assets/default-avatar.png"
 
-
-export const Navigation = () =>{
+export const Navigation = () => {
     const [displayName, setDisplayName] = useState("");
     const [photo, setPhoto] = useState(null);
   
